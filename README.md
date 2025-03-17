@@ -46,3 +46,13 @@ sh plugin_repackaging.sh github https://github.com/junjiem/dify-plugin-agent-mcp
 - 在 .env 配置文件将 `NGINX_CLIENT_MAX_BODY_SIZE` 增大为 `500M`，Nginx客户端将允许上传 500M 大小以内的内容。
 
 
+
+
+### Installing Plugins via Local 通过本地安装插件
+
+Visit the Dify platform's plugin management page, choose Local Package File to complete installation.
+
+访问 Dify 平台的插件管理页，选择通过本地插件完成安装。
+
+![install_plugin_via_local](./images/install_plugin_via_local.png)
+
