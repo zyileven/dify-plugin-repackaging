@@ -8,10 +8,10 @@
 ![market](images/market.png)
 
 ```shell
-sh plugin_repackaging.sh market junjiem mcp_sse 0.0.1
+sh plugin_repackaging.sh market langgenius agent 0.0.9
 ```
 
-![junjiem-mcp_sse](images/junjiem-mcp_sse.png)
+![langgenius-agent](images/langgenius-agent.png)
 
 
 
@@ -23,9 +23,7 @@ sh plugin_repackaging.sh market junjiem mcp_sse 0.0.1
 sh plugin_repackaging.sh github junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mcp_see.difypkg
 ```
 
-
-![langgenius-agent](images/langgenius-agent.png)
-
+![junjiem-mcp_sse](images/junjiem-mcp_sse.png)
 
 
 
