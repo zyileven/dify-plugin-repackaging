@@ -1,6 +1,7 @@
 #!/bin/bash
 # author: Junjie.M
 
+GITHUB_API_URL=https://github.com
 MARKETPLACE_API_URL=https://marketplace.dify.ai
 PIP_MIRROR_URL=https://mirrors.aliyun.com/pypi/simple
 
@@ -29,13 +30,16 @@ github(){
         echo ""
         echo "Usage: "$0" github [Github repo] [Release title] [Assets name (include .difypkg suffix)]"
         echo "Example:"
-        echo "	"$0" github https://github.com/junjiem/dify-plugin-tools-dbquery v0.0.2 db_query.difypkg"
+        echo "	"$0" github junjiem/dify-plugin-tools-dbquery v0.0.2 db_query.difypkg"
         echo "	"$0" github https://github.com/junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mcp_see.difypkg"
         echo ""
         exit 3
   fi
   echo "From the Github downloading ..."
   GITHUB_REPO=$2
+  if [[ "${GITHUB_REPO}" != "${GITHUB_API_URL}"* ]]; then
+      GITHUB_REPO="${GITHUB_API_URL}/${GITHUB_REPO}"
+  fi
   RELEASE_TITLE=$3
   ASSETS_NAME=$4
   PLUGIN_NAME="${ASSETS_NAME%.difypkg}"
@@ -49,7 +53,7 @@ repackage(){
   local PLUGIN_ALL_NAME=$1
   local PLUGIN_PACKAGE_NAME=$2
   local PLUGIN_DOWNLOAD_URL=$3
-	echo "Download ${PLUGIN_PACKAGE_NAME} ..."
+	echo "Download ${PLUGIN_DOWNLOAD_URL} ..."
 	curl -L -o ./${PLUGIN_PACKAGE_NAME} ${PLUGIN_DOWNLOAD_URL}
 	if [[ $? -ne 0 ]]; then
 		echo "Download failed, please check the plugin author, name and version."

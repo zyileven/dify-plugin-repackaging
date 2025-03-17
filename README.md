@@ -20,7 +20,7 @@ sh plugin_repackaging.sh market junjiem mcp_sse 0.0.1
 ![github](images/github.png)
 
 ```shell
-sh plugin_repackaging.sh github https://github.com/junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mcp_see.difypkg
+sh plugin_repackaging.sh github junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mcp_see.difypkg
 ```
 
 
