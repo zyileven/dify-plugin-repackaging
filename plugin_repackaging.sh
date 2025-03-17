@@ -62,7 +62,7 @@ repackage(){
 	cd ./${PLUGIN_ALL_NAME}
 	pip download -r requirements.txt -d ./wheels --index-url ${PIP_MIRROR_URL}
 	sed -i '1i\--no-index --find-links=./wheels/' requirements.txt
-	sed -i '/^wheels\/$/d' .difyignore
+	sed -i '/^wheels\//d' .difyignore
 	cd ..
 	chmod 755 ./dify-plugin-linux-amd64-5g
 	./dify-plugin-linux-amd64-5g plugin package ./${PLUGIN_ALL_NAME} -o ${PLUGIN_ALL_NAME}-offline.difypkg

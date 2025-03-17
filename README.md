@@ -11,6 +11,9 @@
 sh plugin_repackaging.sh market junjiem mcp_sse 0.0.1
 ```
 
+![junjiem-mcp_sse](images/junjiem-mcp_sse.png)
+
+
 
 #### From the Github downloading and repackaging
 
@@ -19,4 +22,7 @@ sh plugin_repackaging.sh market junjiem mcp_sse 0.0.1
 ```shell
 sh plugin_repackaging.sh github https://github.com/junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mcp_see.difypkg
 ```
+
+
+![langgenius-agent](images/langgenius-agent.png)
 
