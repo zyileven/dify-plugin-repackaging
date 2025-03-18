@@ -88,6 +88,10 @@ repackage(){
 	echo "Unziping ..."
 	install_unzip
 	unzip -o ${PACKAGE_PATH} -d ${CURR_DIR}/${PACKAGE_NAME}
+	if [[ $? -ne 0 ]]; then
+    echo "Unzip failed."
+    exit 1
+  fi
 	echo "Unzip success."
 	echo "Repackaging ..."
 	cd ${CURR_DIR}/${PACKAGE_NAME}
