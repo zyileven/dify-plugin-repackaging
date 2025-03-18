@@ -27,6 +27,18 @@ sh plugin_repackaging.sh github junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mc
 
 
 
+#### Local Dify package repackaging
+
+![local](images/local.png)
+
+```shell
+sh plugin_repackaging.sh local ./db_query.difypkg
+```
+
+![db_query](images/db_query.png)
+
+
+
 ### Update Dify platform env  Dify平台放开限制
 
 - your .env configuration file: Change `FORCE_VERIFYING_SIGNATURE` to `false` , the Dify platform will allow the installation of all plugins that are not listed in the Dify Marketplace.
