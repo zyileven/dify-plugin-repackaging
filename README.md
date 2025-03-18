@@ -7,8 +7,12 @@
 
 ![market](images/market.png)
 
+##### Example
+
+![market-example](images/market-example.png)
+
 ```shell
-sh plugin_repackaging.sh market langgenius agent 0.0.9
+./plugin_repackaging.sh market langgenius agent 0.0.9
 ```
 
 ![langgenius-agent](images/langgenius-agent.png)
@@ -19,8 +23,12 @@ sh plugin_repackaging.sh market langgenius agent 0.0.9
 
 ![github](images/github.png)
 
+##### Example
+
+![github-example](images/github-example.png)
+
 ```shell
-sh plugin_repackaging.sh github junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mcp_see.difypkg
+./plugin_repackaging.sh github junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mcp_see.difypkg
 ```
 
 ![junjiem-mcp_sse](images/junjiem-mcp_sse.png)
@@ -31,8 +39,10 @@ sh plugin_repackaging.sh github junjiem/dify-plugin-agent-mcp_sse 0.0.1 agent-mc
 
 ![local](images/local.png)
 
+##### Example
+
 ```shell
-sh plugin_repackaging.sh local ./db_query.difypkg
+./plugin_repackaging.sh local ./db_query.difypkg
 ```
 
 ![db_query](images/db_query.png)
