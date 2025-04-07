@@ -1,6 +1,19 @@
 ## Dify 1.0 Plugin Downloading and Repackaging
 
 
+### Prerequisites
+
+Operating System: Linux amd64
+
+Requires Python Version 3.12+
+
+#### Clone
+```shell
+git clone https://github.com/junjiem/dify-plugin-repackaging.git
+```
+
+
+
 ### Description
 
 #### From the Dify Marketplace downloading and repackaging
