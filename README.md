@@ -5,7 +5,7 @@
 
 Operating System: Linux amd64
 
-Requires Python Version 3.12+
+Requires Python version is 3.11 or higher
 
 #### Clone
 ```shell
