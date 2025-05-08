@@ -1,9 +1,13 @@
 #!/bin/bash
 # author: Junjie.M
 
-GITHUB_API_URL=https://github.com
-MARKETPLACE_API_URL=https://marketplace.dify.ai
-PIP_MIRROR_URL=https://mirrors.aliyun.com/pypi/simple
+DEFAULT_GITHUB_API_URL=https://github.com
+DEFAULT_MARKETPLACE_API_URL=https://marketplace.dify.ai
+DEFAULT_PIP_MIRROR_URL=https://mirrors.aliyun.com/pypi/simple
+
+GITHUB_API_URL="${GITHUB_API_URL:-$DEFAULT_GITHUB_API_URL}"
+MARKETPLACE_API_URL="${MARKETPLACE_API_URL:-$DEFAULT_MARKETPLACE_API_URL}"
+PIP_MIRROR_URL="${PIP_MIRROR_URL:-$DEFAULT_PIP_MIRROR_URL}"
 
 CURR_DIR=`dirname $0`
 cd $CURR_DIR
@@ -96,6 +100,10 @@ repackage(){
 	echo "Repackaging ..."
 	cd ${CURR_DIR}/${PACKAGE_NAME}
 	pip download -r requirements.txt -d ./wheels --index-url ${PIP_MIRROR_URL}
+	if [[ $? -ne 0 ]]; then
+    echo "Pip download failed."
+    exit 1
+  fi
 	sed -i '1i\--no-index --find-links=./wheels/' requirements.txt
 	if [ -f .difyignore ]; then
 	  sed -i '/^wheels\//d' .difyignore
@@ -107,15 +115,14 @@ repackage(){
 }
 
 install_unzip(){
-	rpms=(`rpm -q unzip`)
-	if [ ${#rpms[@]} -ne 1 ]; then
-		echo "Installing unzip ..."
-		yum -y install unzip
-		if [ $? -ne 0 ]; then
-			echo "Install unzip failed."
-			exit 1
-		fi
-	fi
+  if ! command -v unzip &> /dev/null; then
+    echo "Installing unzip ..."
+    yum -y install unzip
+    if [ $? -ne 0 ]; then
+      echo "Install unzip failed."
+      exit 1
+    fi
+  fi
 }
 
 case "$1" in
