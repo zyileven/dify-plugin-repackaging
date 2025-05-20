@@ -101,3 +101,9 @@ Visit the Dify platform's plugin management page, choose Local Package File to c
 
 ![install_plugin_via_local](./images/install_plugin_via_local.png)
 
+
+
+### Star history
+
+[![Star History Chart](https://api.star-history.com/svg?repos=junjiem/dify-plugin-repackaging&type=Date)](https://star-history.com/#junjiem/dify-plugin-repackaging&Date)
+
