@@ -114,9 +114,9 @@ repackage(){
 		echo "Pip download failed."
 		exit 1
 	fi
-	if [[ "linux" == "$OS_TYPE"]]; then
+	if [[ "linux" == "$OS_TYPE" ]]; then
 	  sed -i '1i\--no-index --find-links=./wheels/' requirements.txt
-	elif [[ "darwin" == "$OS_TYPE"]]; then
+	elif [[ "darwin" == "$OS_TYPE" ]]; then
 	  sed -i ".bak" '1i\
 --no-index --find-links=./wheels/
 	  ' requirements.txt
@@ -124,9 +124,9 @@ repackage(){
 	fi
 
 	if [ -f .difyignore ]; then
-	  if [[ "linux" == "$OS_TYPE"]]; then
+	  if [[ "linux" == "$OS_TYPE" ]]; then
 		  sed -i '/^wheels\//d' .difyignore
-		elif [[ "darwin" == "$OS_TYPE"]]; then
+		elif [[ "darwin" == "$OS_TYPE" ]]; then
 		  sed -i ".bak" '/^wheels\//d' .difyignore
 		  rm -f .difyignore.bak
 		fi
