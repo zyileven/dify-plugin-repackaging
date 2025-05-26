@@ -122,13 +122,16 @@ repackage(){
 	  ' requirements.txt
 	  rm -f requirements.txt.bak
 	fi
-
-	if [ -f .difyignore ]; then
-	  if [[ "linux" == "$OS_TYPE" ]]; then
-		  sed -i '/^wheels\//d' .difyignore
+	IGNORE_PATH=.difyignore
+	if [ ! -f "$IGNORE_PATH" ]; then
+	  IGNORE_PATH=.gitignore
+	fi
+	if [ -f "$IGNORE_PATH" ]; then
+		if [[ "linux" == "$OS_TYPE" ]]; then
+		  sed -i '/^wheels\//d' "${IGNORE_PATH}"
 		elif [[ "darwin" == "$OS_TYPE" ]]; then
-		  sed -i ".bak" '/^wheels\//d' .difyignore
-		  rm -f .difyignore.bak
+		  sed -i ".bak" '/^wheels\//d' "${IGNORE_PATH}"
+		  rm -f "${IGNORE_PATH}.bak"
 		fi
 	fi
 	cd ${CURR_DIR}
