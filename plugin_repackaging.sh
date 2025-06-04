@@ -23,6 +23,7 @@ if [[ "arm64" == "$ARCH_NAME" || "aarch64" == "$ARCH_NAME" ]]; then
 fi
 
 PIP_PLATFORM=""
+PACKAGE_SUFFIX="offline"
 
 market(){
 	if [[ -z "$2" || -z "$3" || -z "$4" ]]; then
@@ -115,28 +116,28 @@ repackage(){
 		exit 1
 	fi
 	if [[ "linux" == "$OS_TYPE" ]]; then
-	  sed -i '1i\--no-index --find-links=./wheels/' requirements.txt
+		sed -i '1i\--no-index --find-links=./wheels/' requirements.txt
 	elif [[ "darwin" == "$OS_TYPE" ]]; then
-	  sed -i ".bak" '1i\
+		sed -i ".bak" '1i\
 --no-index --find-links=./wheels/
 	  ' requirements.txt
-	  rm -f requirements.txt.bak
+		rm -f requirements.txt.bak
 	fi
 	IGNORE_PATH=.difyignore
 	if [ ! -f "$IGNORE_PATH" ]; then
-	  IGNORE_PATH=.gitignore
+		IGNORE_PATH=.gitignore
 	fi
 	if [ -f "$IGNORE_PATH" ]; then
 		if [[ "linux" == "$OS_TYPE" ]]; then
-		  sed -i '/^wheels\//d' "${IGNORE_PATH}"
+			sed -i '/^wheels\//d' "${IGNORE_PATH}"
 		elif [[ "darwin" == "$OS_TYPE" ]]; then
-		  sed -i ".bak" '/^wheels\//d' "${IGNORE_PATH}"
-		  rm -f "${IGNORE_PATH}.bak"
+			sed -i ".bak" '/^wheels\//d' "${IGNORE_PATH}"
+			rm -f "${IGNORE_PATH}.bak"
 		fi
 	fi
 	cd ${CURR_DIR}
 	chmod 755 ${CURR_DIR}/${CMD_NAME}
-	${CURR_DIR}/${CMD_NAME} plugin package ${CURR_DIR}/${PACKAGE_NAME} -o ${CURR_DIR}/${PACKAGE_NAME}-offline.difypkg
+	${CURR_DIR}/${CMD_NAME} plugin package ${CURR_DIR}/${PACKAGE_NAME} -o ${CURR_DIR}/${PACKAGE_NAME}-${PACKAGE_SUFFIX}.difypkg
 	echo "Repackage success."
 }
 
@@ -152,17 +153,23 @@ install_unzip(){
 }
 
 print_usage() {
-	echo "usage: $0 [-p platform] {market|github|local}"
-	echo "-p platform: python packages' platform. Using for crossing repacking."
+	echo "usage: $0 [-p platform] [-s package_suffix] {market|github|local}"
+	echo "-p platform: python packages' platform. Using for crossing repacking.
+        For example: -p manylinux2014_x86_64 or -p manylinux2014_aarch64"
+	echo "-s package_suffix: The suffix name of the output offline package.
+        For example: -s linux-amd64 or -s linux-arm64"
 	exit 1
 }
 
-while getopts "p:" opt; do
+while getopts "p:s:" opt; do
 	case "$opt" in
-		p) PIP_PLATFORM="--platform ${OPTARG} --only-binary=:all:"; shift $((OPTIND - 1)) ;;
+		p) PIP_PLATFORM="--platform ${OPTARG} --only-binary=:all:" ;;
+		s) PACKAGE_SUFFIX="${OPTARG}" ;;
 		*) print_usage; exit 1 ;;
 	esac
 done
+
+shift $((OPTIND - 1))
 
 echo "$1"
 case "$1" in
