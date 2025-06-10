@@ -11,6 +11,19 @@ body:
             I have searched for existing issues [search for existing issues](https://github.com/junjiem/dify-plugin-repackaging/issues), including closed ones. 
             我已经搜索了现有问题[搜索现有问题](https://github.com/junjiem/dify-plugin-repackaging/issues)，包括已关闭的问题。"
           required: true
+  - type: dropdown
+    attributes:
+      label: OS Platform 操作系统平台
+      description: Which OS Platform? 哪个操作系统平台？
+      multiple: true
+      options:
+        - linux-amd64
+        - linux-arm64
+        - darwin-amd64
+        - darwin-arm64
+        - others
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: "Problem description 问题描述"
