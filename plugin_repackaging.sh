@@ -96,6 +96,102 @@ _local(){
 	repackage ${PLUGIN_PACKAGE_PATH}
 }
 
+_local_package(){
+	echo $2
+	if [[ -z "$2" ]]; then
+		echo ""
+		echo "Usage: "$0" local_package [plugin directory path]"
+		echo "Example:"
+		echo "	"$0" local_package ./junjiem-knowledge_extractor_0.0.2/"
+		echo "	"$0" local_package /root/dify-plugin/my-plugin/"
+		echo ""
+		exit 1
+	fi
+	PLUGIN_DIR_PATH=`realpath $2`
+	
+	# Check if the path is a directory
+	if [[ ! -d "$PLUGIN_DIR_PATH" ]]; then
+		echo "Error: '$PLUGIN_DIR_PATH' is not a directory."
+		exit 1
+	fi
+	
+	# Check if the directory contains required files
+	if [[ ! -f "$PLUGIN_DIR_PATH/manifest.yaml" ]]; then
+		echo "Error: '$PLUGIN_DIR_PATH' does not contain manifest.json. Not a valid plugin directory."
+		exit 1
+	fi
+	
+	package ${PLUGIN_DIR_PATH}
+}
+
+package() {
+	local PLUGIN_DIR=$1
+	
+	# Extract package name from directory path
+	PACKAGE_NAME=$(basename "$PLUGIN_DIR")
+	
+	echo "Processing plugin directory: $PLUGIN_DIR"
+	echo "Package name: $PACKAGE_NAME"
+	
+	# Check if requirements.txt exists
+	if [[ ! -f "$PLUGIN_DIR/requirements.txt" ]]; then
+		echo "Warning: No requirements.txt found in $PLUGIN_DIR. Creating empty requirements.txt."
+		touch "$PLUGIN_DIR/requirements.txt"
+	fi
+	
+	# Change to plugin directory
+	cd "$PLUGIN_DIR"
+	
+	# Download dependencies to wheels directory
+	echo "Downloading Python dependencies..."
+	pip3 download ${PIP_PLATFORM} -r requirements.txt -d ./wheels --index-url ${PIP_MIRROR_URL} --trusted-host mirrors.aliyun.com
+	if [[ $? -ne 0 ]]; then
+		echo "Pip download failed."
+		exit 1
+	fi
+	
+	# Modify requirements.txt to use local wheels
+	echo "Modifying requirements.txt to use local wheels..."
+	if [[ "linux" == "$OS_TYPE" ]]; then
+		sed -i '1i\--no-index --find-links=./wheels/' requirements.txt
+	elif [[ "darwin" == "$OS_TYPE" ]]; then
+		sed -i ".bak" '1i\
+--no-index --find-links=./wheels/
+	  ' requirements.txt
+		rm -f requirements.txt.bak
+	fi
+	
+	# Update ignore files to exclude wheels from being ignored
+	IGNORE_PATH=.difyignore
+	if [ ! -f "$IGNORE_PATH" ]; then
+		IGNORE_PATH=.gitignore
+	fi
+	if [ -f "$IGNORE_PATH" ]; then
+		echo "Updating $IGNORE_PATH to include wheels directory..."
+		if [[ "linux" == "$OS_TYPE" ]]; then
+			sed -i '/^wheels\//d' "${IGNORE_PATH}"
+		elif [[ "darwin" == "$OS_TYPE" ]]; then
+			sed -i ".bak" '/^wheels\//d' "${IGNORE_PATH}"
+			rm -f "${IGNORE_PATH}.bak"
+		fi
+	fi
+	
+	# Return to original directory
+	cd ${CURR_DIR}
+	
+	# Make CLI executable and package the plugin
+	chmod 755 ${CURR_DIR}/${CMD_NAME}
+	echo "Creating offline package..."
+	${CURR_DIR}/${CMD_NAME} plugin package "$PLUGIN_DIR" -o ${CURR_DIR}/${PACKAGE_NAME}-${PACKAGE_SUFFIX}.difypkg
+	
+	if [[ $? -eq 0 ]]; then
+		echo "Package created successfully: ${CURR_DIR}/${PACKAGE_NAME}-${PACKAGE_SUFFIX}.difypkg"
+	else
+		echo "Package creation failed."
+		exit 1
+	fi
+}
+
 repackage(){
 	local PACKAGE_PATH=$1
 	PACKAGE_NAME_WITH_EXTENSION=`basename ${PACKAGE_PATH}`
@@ -110,7 +206,7 @@ repackage(){
 	echo "Unzip success."
 	echo "Repackaging ..."
 	cd ${CURR_DIR}/${PACKAGE_NAME}
-	pip download ${PIP_PLATFORM} -r requirements.txt -d ./wheels --index-url ${PIP_MIRROR_URL} --trusted-host mirrors.aliyun.com
+	pip3 download ${PIP_PLATFORM} -r requirements.txt -d ./wheels --index-url ${PIP_MIRROR_URL} --trusted-host mirrors.aliyun.com
 	if [[ $? -ne 0 ]]; then
 		echo "Pip download failed."
 		exit 1
@@ -181,6 +277,9 @@ case "$1" in
 	;;
 	'local')
 	_local $@
+	;;
+	'local_package')
+	_local_package $@
 	;;
 	*)
 
